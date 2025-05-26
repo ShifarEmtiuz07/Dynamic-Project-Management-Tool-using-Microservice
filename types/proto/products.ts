@@ -20,19 +20,28 @@ export interface ProductResponse {
   price: number;
 }
 
+export interface CreateUserRequest {
+  name: string;
+  price: number;
+}
+
 export const PRODUCTS_PACKAGE_NAME = "products";
 
 export interface ProductServiceClient {
   getProduct(request: ProductRequest): Observable<ProductResponse>;
+
+  create(request: CreateUserRequest): Observable<ProductResponse>;
 }
 
 export interface ProductServiceController {
   getProduct(request: ProductRequest): Promise<ProductResponse> | Observable<ProductResponse> | ProductResponse;
+
+  create(request: CreateUserRequest): Promise<ProductResponse> | Observable<ProductResponse> | ProductResponse;
 }
 
 export function ProductServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["getProduct"];
+    const grpcMethods: string[] = ["getProduct", "create"];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("ProductService", method)(constructor.prototype[method], method, descriptor);

@@ -4,6 +4,7 @@ package products;
 
 service ProductService {
     rpc getProduct (ProductRequest) returns (ProductResponse);
+    rpc create (CreateUserRequest) returns (ProductResponse);
 }
 
 message ProductRequest{
@@ -15,5 +16,11 @@ message ProductResponse{
     int32 productId=1;
     string name= 2;
     int32 price = 3;
+    
+}
+message CreateUserRequest{
+ 
+    string name= 1;
+    int32 price = 2;
     
 }
