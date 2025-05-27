@@ -18,11 +18,12 @@ async function bootstrap() {
       options: {
         package: PROJECT_PACKAGE_NAME,
         protoPath: join(__dirname, 'proto/project.proto'),
+         url: 'localhost:5001',
       },
     }
   );
   await app.listen();
-  Logger.log('Application is running on gRPC channel');
+  Logger.log('Project Application is running on gRPC channel');
 }
 
 bootstrap();

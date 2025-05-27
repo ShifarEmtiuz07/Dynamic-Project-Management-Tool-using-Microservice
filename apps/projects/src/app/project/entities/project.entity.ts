@@ -7,5 +7,5 @@ export class Project {
   @Column()
   name: string;
   @Column()
-  description: string;
+  deccription: string;
 }

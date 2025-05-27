@@ -30,20 +30,18 @@ export const PROJECT_PACKAGE_NAME = "project";
 export interface ProjectServiceClient {
   getProject(request: ProjectRequest): Observable<ProjectResponse>;
 
-  createProject(request: CreateProjectRequest): Observable<ProjectResponse>;
+  create(request: CreateProjectRequest): Observable<ProjectResponse>;
 }
 
 export interface ProjectServiceController {
   getProject(request: ProjectRequest): Promise<ProjectResponse> | Observable<ProjectResponse> | ProjectResponse;
 
-  createProject(
-    request: CreateProjectRequest,
-  ): Promise<ProjectResponse> | Observable<ProjectResponse> | ProjectResponse;
+  create(request: CreateProjectRequest): Promise<ProjectResponse> | Observable<ProjectResponse> | ProjectResponse;
 }
 
 export function ProjectServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["getProject", "createProject"];
+    const grpcMethods: string[] = ["getProject", "create"];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("ProjectService", method)(constructor.prototype[method], method, descriptor);
