@@ -14,15 +14,23 @@ export interface ProductRequest {
   productId: number;
 }
 
+export interface Project {
+  id: number;
+  name: string;
+  description: string;
+}
+
 export interface ProductResponse {
   productId: number;
   name: string;
   price: number;
+  project: Project | undefined;
 }
 
 export interface CreateUserRequest {
   name: string;
   price: number;
+  projectId: number;
 }
 
 export const PRODUCTS_PACKAGE_NAME = "products";

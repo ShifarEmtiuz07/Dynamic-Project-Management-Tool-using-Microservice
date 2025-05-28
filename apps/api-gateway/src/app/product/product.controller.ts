@@ -32,6 +32,7 @@ export class ProductController implements OnModuleInit {
 
   @Post()
   create(@Body() createUserRequest: CreateUserRequest) {
+   // console.log(createUserRequest)
     return this.productService.create(createUserRequest);
   }
 

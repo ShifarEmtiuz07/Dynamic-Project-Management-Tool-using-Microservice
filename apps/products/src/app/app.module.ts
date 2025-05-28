@@ -7,12 +7,13 @@ import { ProductController } from './products/product.controller';
 import { ProductsModule } from './products/products.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Product } from './products/entities/product.entity';
+import { Project } from 'apps/projects/src/app/project/entities/project.entity';
 
 @Module({
   imports: [
     DatabaseModule,
     ProductsModule,
-    TypeOrmModule.forFeature([Product]),
+    TypeOrmModule.forFeature([Product,Project]),
   ],
   controllers: [AppController, ProductController],
   providers: [AppService, ProductsService],

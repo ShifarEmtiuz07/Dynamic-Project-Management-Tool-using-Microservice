@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Project } from './../../../../../projects/src/app/project/entities/project.entity';
+
 
 @Entity()
 export class Product {
@@ -10,4 +12,7 @@ export class Product {
 
   @Column()
   price: number;
+
+  @ManyToOne(()=>Project,(project)=>project.product)
+  project:Project;
 }

@@ -17,12 +17,12 @@ export interface ProjectRequest {
 export interface ProjectResponse {
   projectId: number;
   name: string;
-  deccription: string;
+  description: string;
 }
 
 export interface CreateProjectRequest {
   name: string;
-  deccription: string;
+  description: string;
 }
 
 export const PROJECT_PACKAGE_NAME = "project";

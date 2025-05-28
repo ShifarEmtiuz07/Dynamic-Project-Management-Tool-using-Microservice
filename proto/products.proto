@@ -12,15 +12,24 @@ message ProductRequest{
 
 }
 
+message Project{
+    int32 id=1;
+    string name= 2;
+    string description=3;
+    
+}
+
 message ProductResponse{
     int32 productId=1;
     string name= 2;
     int32 price = 3;
+    Project project = 4;
     
 }
 message CreateUserRequest{
  
     string name= 1;
     int32 price = 2;
+    int32 projectId=3;
     
 }

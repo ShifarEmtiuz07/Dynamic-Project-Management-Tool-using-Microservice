@@ -24,7 +24,7 @@ export class ProjectController implements ProjectServiceController {
     return{
       projectId:project.id,
       name:project.name,
-      deccription:project.deccription,
+      description:project.description,
 
 
     }

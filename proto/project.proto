@@ -15,12 +15,12 @@ message ProjectRequest{
 message ProjectResponse{
     int32 projectId=1;
     string name= 2;
-    string deccription=3;
+    string description=3;
     
 }
 message CreateProjectRequest{
  
     string name= 1;
-    string deccription=2;
+    string description=2;
     
 }

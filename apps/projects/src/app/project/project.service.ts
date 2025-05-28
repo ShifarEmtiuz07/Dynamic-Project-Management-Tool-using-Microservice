@@ -18,7 +18,7 @@ export class ProjectService {
    return{
     projectId:savedProject.id,
     name:savedProject.name,
-    deccription:savedProject.deccription
+    description:savedProject.description
    };
   }
 
