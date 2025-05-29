@@ -1,3 +1,4 @@
+import { USER_PACKAGE_NAME } from './../../../../types/proto/user';
 import { PRODUCTS_PACKAGE_NAME } from './../../../../types/proto/products';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
@@ -7,6 +8,8 @@ import { join } from 'path';
 import { ProductController } from './product/product.controller';
 import { PROJECT_PACKAGE_NAME } from './../../../../types/proto/project';
 import { ProjectController } from './project/project.controller';
+
+import { UserManagementController } from './userManagement/user-management.controller';
 
 
 @Module({
@@ -31,9 +34,25 @@ import { ProjectController } from './project/project.controller';
           url: 'localhost:5001',
         },
       },
+
+      
+      {
+        name: USER_PACKAGE_NAME,
+        transport: Transport.GRPC,
+        options: {
+          package: USER_PACKAGE_NAME,
+          protoPath: join(__dirname, 'proto/user.proto'),
+          url: 'localhost:5002',
+        },
+      },
     ]),
   ],
-  controllers: [AppController, ProductController, ProjectController],
+  controllers: [
+    AppController,
+    ProductController,
+    ProjectController,
+    UserManagementController,
+  ],
   providers: [AppService],
 })
 export class AppModule {}

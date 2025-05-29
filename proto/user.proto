@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+package user;
+
+import "google/protobuf/timestamp.proto";
+
+
+enum Role {
+
+ROLE_UNSPECIFIED = 0;
+  Manager = 1;
+  TeamLead = 2;
+  TeamMember =3;
+  Hr = 4;
+  Admin =5;
+  
+}
+
+
+message User {
+  int32 id = 1;
+  string userName = 2;
+  string userImage = 3;
+  string employeeId = 4;
+  string email = 5;
+  string phone = 6;
+  int32 currentTask = 7;
+  int32 maxTask = 8;
+  bool status = 9;
+  repeated Role roles = 10;
+  google.protobuf.Timestamp created_at = 11;
+  google.protobuf.Timestamp updated_at = 12;
+}
+
+
+message CreateUserRequest {
+  string userName = 1;
+  string userImage = 2;
+  string employeeId = 3;
+  string email = 4;
+  string phone = 5;
+  string password = 6;
+  int32 currentTask = 7;
+  int32 maxTask = 8;
+  bool status = 9;
+  repeated Role roles = 10;
+}
+
+message UpdateUserRequest {
+  int32 id = 1;
+  string userName = 2;
+  string userImage = 3;
+  string employeeId = 4;
+  string email = 5;
+  string phone = 6;
+  int32 currentTask = 7;
+  int32 maxTask = 8;
+  bool status = 9;
+  repeated Role roles = 10;
+}
+
+
+message UserId {
+  int32 id = 1;
+}
+
+
+message UserList {
+  repeated User users = 1;
+}
+
+
+service UserService {
+  rpc CreateUser(CreateUserRequest) returns (User);
+  rpc GetUser(UserId) returns (User);
+  rpc UpdateUser(UpdateUserRequest) returns (User);
+  rpc DeleteUser(UserId) returns (User);
+  rpc ListUsers(Empty) returns (UserList);
+}
+
+// Empty message (for listing)
+message Empty {}
