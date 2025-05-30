@@ -11,55 +11,56 @@ import { Timestamp } from "../google/protobuf/timestamp";
 
 export const protobufPackage = "user";
 
-export enum Role {
-  ROLE_UNSPECIFIED = 0,
-  Manager = 1,
-  TeamLead = 2,
-  TeamMember = 3,
-  Hr = 4,
-  Admin = 5,
-  UNRECOGNIZED = -1,
+export interface Task {
+  id: number;
+  title: string;
+  priority: string;
 }
 
 export interface User {
   id: number;
   userName: string;
-  userImage: string;
+  //userImage: string;
   employeeId: string;
   email: string;
   phone: string;
   currentTask: number;
   maxTask: number;
   status: boolean;
-  roles: Role[];
+  skills: string[];
+  roles: string[];
   createdAt: Timestamp | undefined;
   updatedAt: Timestamp | undefined;
+  tasks: Task[];
 }
 
 export interface CreateUserRequest {
   userName: string;
-  userImage: string;
+  //userImage: string;
   employeeId: string;
   email: string;
-  phone: string;
   password: string;
+  phone: string;
   currentTask: number;
   maxTask: number;
   status: boolean;
-  roles: Role[];
+  skills: string[];
+  roles: string[];
 }
 
 export interface UpdateUserRequest {
   id: number;
   userName: string;
-  userImage: string;
+  //userImage: string;
   employeeId: string;
   email: string;
   phone: string;
   currentTask: number;
   maxTask: number;
   status: boolean;
-  roles: Role[];
+  skills: string[];
+  roles: string[];
+  tasks: Task[];
 }
 
 export interface UserId {

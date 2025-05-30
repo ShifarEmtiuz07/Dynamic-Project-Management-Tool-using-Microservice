@@ -8,7 +8,7 @@ import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
-import { join } from 'path';
+import path, { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
@@ -19,6 +19,13 @@ async function bootstrap() {
         package: USER_PACKAGE_NAME,
         protoPath: join(__dirname, 'proto/user.proto'),
          url: 'localhost:5002',
+        loader: {
+        includeDirs: [
+          path.resolve(__dirname, 'proto'),
+          path.resolve(__dirname, '../../node_modules/google-proto-files'),
+        ],
+      },
+        
       },
     }
   );

@@ -1,0 +1,106 @@
+syntax = "proto3";
+
+package task;
+
+
+message User {
+  int32 id = 1;
+  string username = 2;
+  string role=3; 
+}
+
+message Task {
+  int32 id = 1;
+  string title = 2;
+  repeated string requiredSkills = 3;
+  string priority = 4;
+  string status = 5;
+ 
+  repeated User users = 7; 
+}
+
+
+
+message CreateTaskRequest {
+  string title = 1;
+  repeated string requiredSkills = 2;
+  string priority = 3;
+  string status = 4;
+  repeated int32 assignedTo = 5;
+}
+
+message CreateTaskResponse {
+  Task task = 1;
+}
+
+
+message GetTaskRequest {
+  int32 id = 1;
+}
+
+message GetTaskResponse {
+  Task task = 1;
+}
+
+
+message UpdateTaskRequest {
+  int32 id = 1;
+  string title = 2;
+  repeated string requiredSkills = 3;
+  string priority = 4;
+  string status = 5;
+  repeated int32 assignedTo = 6;
+ 
+}
+
+message UpdateTaskResponse {
+  Task task = 1;
+}
+
+
+message DeleteTaskRequest {
+  int32 id = 1;
+}
+
+message DeleteTaskResponse {
+  bool success = 1;
+}
+
+
+message ListTasksRequest {
+  // Optional: Add filters or pagination if needed
+}
+
+message ListTasksResponse {
+  repeated Task tasks = 1;
+}
+
+
+message AddUserToTaskRequest {
+  int32 taskId = 1;
+  int32 userId = 2;
+}
+
+message AddUserToTaskResponse {
+  Task task = 1;
+}
+
+
+message RemoveUserFromTaskRequest {
+  int32 taskId = 1;
+  int32 userId = 2;
+}
+
+message RemoveUserFromTaskResponse {
+  Task task = 1;
+}
+
+
+service TaskService {
+  rpc createTask(CreateTaskRequest) returns (CreateTaskResponse) {}
+  rpc getTask(GetTaskRequest) returns (GetTaskResponse) {}
+  rpc updateTask(UpdateTaskRequest) returns (UpdateTaskResponse) {}
+  rpc deleteTask(DeleteTaskRequest) returns (DeleteTaskResponse) {}
+  rpc listTasks(ListTasksRequest) returns (ListTasksResponse) {}
+
+}

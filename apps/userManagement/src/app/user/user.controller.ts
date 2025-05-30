@@ -6,22 +6,24 @@ import { CreateUserRequest,  Empty,  UpdateUserRequest,  User,  UserId,  UserLis
 import { Observable } from 'rxjs';
 
 
-@Controller('user')
+@Controller('user-management')
 @UserServiceControllerMethods()
 export class UserController implements UserServiceController {
   constructor(private readonly userService: UserService) {}
 
 
 async createUser(request: CreateUserRequest): Promise<User> {
-  return await this.userService.create(request);
+  return await this.userService.createUser(request);
 }
 
 async  getUser(request: UserId): Promise<User>{
+ 
   return await this.userService.findOne(request);
 }
 
 async listUsers(request: Empty): Promise<UserList> {
-  return await this.userService.findAll(request);
+  const users = await this.userService.findAll(request);
+  return { users };
 }
 
 async  updateUser(request: UpdateUserRequest): Promise<User> {

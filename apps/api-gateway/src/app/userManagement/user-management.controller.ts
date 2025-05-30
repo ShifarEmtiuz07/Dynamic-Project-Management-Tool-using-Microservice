@@ -15,12 +15,13 @@ export class UserManagementController implements OnModuleInit {
 
     @Post()
     createUser(@Body() request: CreateUserRequest ){
+    
         return this.userManagementService.createUser(request);
     }
 
     @Get(':id')
-    getUser(@Param('id') id:UserId){
-         return this.userManagementService.getUser(id);
+    getUser(@Param('id') id:number){
+         return this.userManagementService.getUser({id});
     }
 
     @Get()
@@ -34,8 +35,8 @@ export class UserManagementController implements OnModuleInit {
     }
 
     @Delete(':id')
-    deleteUser(@Param('id') id:UserId){
-         return this.userManagementService.deleteUser(id);
+    deleteUser(@Param('id') id:number){
+         return this.userManagementService.deleteUser({id});
     }
 
 }

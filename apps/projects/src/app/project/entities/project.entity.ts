@@ -2,6 +2,7 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Product } from './../../../../../products/src/app/products/entities/product.entity';
 
 
+
 @Entity()
 export class Project {
   @PrimaryGeneratedColumn()

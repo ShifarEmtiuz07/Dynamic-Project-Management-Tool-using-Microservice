@@ -4,18 +4,11 @@ package user;
 
 import "google/protobuf/timestamp.proto";
 
-
-enum Role {
-
-ROLE_UNSPECIFIED = 0;
-  Manager = 1;
-  TeamLead = 2;
-  TeamMember =3;
-  Hr = 4;
-  Admin =5;
-  
+message Task{
+  int32 id=1;
+  string title=2;
+  string priority=3;
 }
-
 
 message User {
   int32 id = 1;
@@ -27,9 +20,11 @@ message User {
   int32 currentTask = 7;
   int32 maxTask = 8;
   bool status = 9;
-  repeated Role roles = 10;
-  google.protobuf.Timestamp created_at = 11;
-  google.protobuf.Timestamp updated_at = 12;
+  repeated string skills = 10;
+  repeated string roles = 11;
+  google.protobuf.Timestamp created_at = 12;
+  google.protobuf.Timestamp updated_at = 13;
+  repeated Task tasks=14;
 }
 
 
@@ -38,12 +33,13 @@ message CreateUserRequest {
   string userImage = 2;
   string employeeId = 3;
   string email = 4;
-  string phone = 5;
-  string password = 6;
+  string password = 5;
+  string phone = 6;
   int32 currentTask = 7;
   int32 maxTask = 8;
   bool status = 9;
-  repeated Role roles = 10;
+  repeated string skills = 10;
+  repeated string roles = 11;
 }
 
 message UpdateUserRequest {
@@ -56,7 +52,9 @@ message UpdateUserRequest {
   int32 currentTask = 7;
   int32 maxTask = 8;
   bool status = 9;
-  repeated Role roles = 10;
+  repeated string skills = 10;
+  repeated string roles = 11;
+  repeated Task tasks=12;
 }
 
 
@@ -71,11 +69,11 @@ message UserList {
 
 
 service UserService {
-  rpc CreateUser(CreateUserRequest) returns (User);
-  rpc GetUser(UserId) returns (User);
-  rpc UpdateUser(UpdateUserRequest) returns (User);
-  rpc DeleteUser(UserId) returns (User);
-  rpc ListUsers(Empty) returns (UserList);
+  rpc createUser(CreateUserRequest) returns (User);
+  rpc getUser(UserId) returns (User);
+  rpc updateUser(UpdateUserRequest) returns (User);
+  rpc deleteUser(UserId) returns (User);
+  rpc listUsers(Empty) returns (UserList);
 }
 
 // Empty message (for listing)

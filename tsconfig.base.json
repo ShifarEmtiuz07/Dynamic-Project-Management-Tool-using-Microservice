@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@nestjs-microservice/common": ["libs/common/src/index.ts"]
+      "@nestjs-microservice/common": ["libs/common/src/index.ts"],
+      "@nestjs-microservice/shared-entities": ["shared-entities/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

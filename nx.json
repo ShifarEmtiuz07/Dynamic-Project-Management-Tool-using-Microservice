@@ -42,7 +42,8 @@
         "apps/api-gateway-e2e/**/*",
         "apps/products-e2e/**/*",
         "apps/projects-e2e/**/*",
-        "apps/userManagement-e2e/**/*"
+        "apps/userManagement-e2e/**/*",
+        "apps/tasks-e2e/**/*"
       ]
     }
   ],
