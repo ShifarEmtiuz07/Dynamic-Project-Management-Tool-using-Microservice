@@ -42,8 +42,8 @@ export class UserEntity {
   skills!: string[];
 
 
-  @Column({nullable: true, type: 'simple-array'})
-  roles!: string[];
+  @Column({nullable: true,})
+  roles!: string;
 
   @CreateDateColumn({ type: 'timestamp' })
   created_at!: Date;
@@ -53,7 +53,7 @@ export class UserEntity {
 
 
   
-  @ManyToMany(()=>TaskEntity,(taskEntity=>taskEntity.users))
+  @OneToMany(()=>TaskEntity,(taskEntity=>taskEntity.users))
   @JoinTable()
   tasks!: TaskEntity[];
 

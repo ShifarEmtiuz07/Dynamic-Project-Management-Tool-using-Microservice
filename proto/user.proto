@@ -21,7 +21,7 @@ message User {
   int32 maxTask = 8;
   bool status = 9;
   repeated string skills = 10;
-  repeated string roles = 11;
+  string roles = 11;
   google.protobuf.Timestamp created_at = 12;
   google.protobuf.Timestamp updated_at = 13;
   repeated Task tasks=14;
@@ -39,7 +39,7 @@ message CreateUserRequest {
   int32 maxTask = 8;
   bool status = 9;
   repeated string skills = 10;
-  repeated string roles = 11;
+  string roles = 11;
 }
 
 message UpdateUserRequest {
@@ -53,7 +53,7 @@ message UpdateUserRequest {
   int32 maxTask = 8;
   bool status = 9;
   repeated string skills = 10;
-  repeated string roles = 11;
+  string roles = 11;
   repeated Task tasks=12;
 }
 

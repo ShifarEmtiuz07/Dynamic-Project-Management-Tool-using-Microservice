@@ -1,7 +1,8 @@
 import { Body, Controller, Delete, Get, Inject, OnModuleInit, Param, Patch, Post } from '@nestjs/common';
-import {  CreateTaskRequest, CreateTaskResponse, DeleteTaskRequest, DeleteTaskResponse, GetTaskRequest, GetTaskResponse, ListTasksRequest, ListTasksResponse, TASK_PACKAGE_NAME, TASK_SERVICE_NAME, TaskServiceClient, UpdateTaskRequest, UpdateTaskResponse } from './../../../../../types/proto/task';
+import {  CreateTaskRequest, CreateTaskResponse, DeleteTaskRequest, DeleteTaskResponse, Empty, GetTaskRequest, GetTaskResponse, ListTasksRequest, ListTasksResponse, TASK_PACKAGE_NAME, TASK_SERVICE_NAME, TaskServiceClient, UpdateTaskRequest, UpdateTaskResponse } from './../../../../../types/proto/task';
 import { ClientGrpc } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
+import { Task } from 'types/proto/user';
 
 
 @Controller('tasks')
@@ -21,8 +22,14 @@ export class TasksController implements OnModuleInit {
         return this.taskService.createTask(request);
     }
 
+    @Post('assign-tasks')
+    assignTasks(@Body() request: Empty): Observable<ListTasksResponse> {
+       
+        return this.taskService.assignTasks(request);
+    }
+
    @Get(':id')
-    getTask(@Param('id') id: number): Observable<GetTaskResponse> { 
+    getTask(@Param('id') id: number): Observable<Task> { 
        
         return this.taskService.getTask({id});   
     }  

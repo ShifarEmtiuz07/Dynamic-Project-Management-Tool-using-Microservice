@@ -1,3 +1,4 @@
+import { calculateScore } from './../../../../../libs/common/src/Algorithm/scoringAlgorithm';
 import { Injectable } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
@@ -20,25 +21,20 @@ export class TaskService {
 
 
       console.log( createTask);
-      const usersId: number[] = createTask.assignedTo || [];
-     // console.log('Creating task with assigned users:', usersId);
-
-      const users = await Promise.all(
-       usersId.map(async (userId) => {
-          return this.userRepository.findOne({ where: { id: userId } });
-        })
-      );
-      //console.log( createTask.assignedTo);
+      const userId:number = createTask.assignedTo ;
+        const user= await this.userRepository.findOne({ where: { id: userId } });
 
 
-
+        if(!user) {
+          throw new Error(`User with ID ${userId} not found`);
+        }
   const task =await this.taskRepository.create({
   title: createTask.title,
   requiredSkills: createTask.requiredSkills,
   priority: createTask.priority,
   status: createTask.status,
   //assignedTo: createTask.assignedTo,
-  users:users
+  users:user
 });
 const savedTask = await this.taskRepository.save(task);
 
@@ -50,15 +46,14 @@ const savedTask = await this.taskRepository.save(task);
         requiredSkills: savedTask.requiredSkills,
         priority: savedTask.priority,
         status: savedTask.status,
-       users: savedTask.users.map(user => ({
-          id: user.id,    
-          username: user.userName,
-          role: user.roles.map(role => role).join(', '), 
-        })),
+       users: {
+          id: savedTask.users.id,
+          username: savedTask.users.userName,
+          role: savedTask.users.roles // Assuming roles is an array
+       }
+       }
 
-      };  
-
-       return { message: 'Task created successfully', task: createNewTask };
+        return { message: 'Task created successfully', task: createNewTask };
     }catch (error) {
       console.error('Error creating task:', error);
       throw new Error('Failed to create task');
@@ -80,21 +75,20 @@ async  getTask(id: number) {
 
     console.log('Task found:', findTask);
 
-    const task :Task={
+    return {
       id: findTask.id,
       title: findTask.title,
       requiredSkills: findTask.requiredSkills,
       priority: findTask.priority,
       status: findTask.status,
-      users: findTask.users.map(user => ({
-        id: user.id,
-        username: user.userName,
-        role: user.roles.map(role => role).join(', '), 
-      })),
+      users: { id:findTask.users.id,
+        username: findTask.users.userName,
+        role: findTask.users.roles,
     }
     
-    return { message: `Task with ID ${id} retrieved successfully` ,task: task };
-  }catch(error) {
+  
+  }
+}catch(error) {
     console.error('Error retrieving task:', error);
   }
 }
@@ -109,21 +103,18 @@ async  getTask(id: number) {
     if (!tasks || tasks.length === 0) {
       throw new Error('No tasks found');
     }
-    const taskList = tasks.map(task => ({
+
+    return tasks.map(task => ({
       id: task.id,
       title: task.title,
       requiredSkills: task.requiredSkills,
       priority: task.priority,
       status: task.status,
-      users: task.users.map(user => ({
-        id: user.id,
-        username: user.userName,
-        role: user.roles.map(role => role).join(', '), 
-      })),
-    }));
-    // Logic to list all tasks
-    return { message: 'List of all tasks', tasks: taskList };
-
+      users: {
+        id: task.users.id,
+        username: task.users.userName,
+        role: task.users.roles
+ }}))
  }catch(error) {
     console.error('Error listing tasks:', error); 
  }  
@@ -198,5 +189,72 @@ catch(error) {
 
 
 }
+
+ async assignTasks(){
+   const tasks = await this.taskRepository.find({ where: { status: 'pending',  } }); //users: null
+  const users = await this.userRepository.find();
+
+  for (const task of tasks) {
+    let bestUser = null;
+    let bestScore = -1;
+
+    for (const user of users) {
+      if (user.currentTask >= user.maxTask) continue;
+      const score = calculateScore(user, task);
+
+      if (score > bestScore) {
+        bestScore = score;
+        bestUser = user;
+      }
+    }
+
+    if (bestUser) {
+
+      task.users = bestUser.id;
+      task.status = 'in_progress';
+      bestUser.currentTasks += 1;
+
+      await this.taskRepository.save(task);
+      await this.userRepository.save(bestUser);
+    }
+
+    const  assignedTasks={
+      id: task.id,
+      title: task.title,
+      requiredSkills: task.requiredSkills,
+      priority: task.priority,
+      status: task.status,
+      users: {
+        id: bestUser.id,
+        username: bestUser.userName,
+        role: bestUser.roles.map(role => role).join(', '), // Assuming roles is an array
+      }   
+     };
+
+    return {task: assignedTasks };
+  }
+  // Return the updated tasks
+ }
+
+
+//  async  reassignTask(taskId: number) {
+//   const task =  await this.taskRepository.findOne({where:{id: taskId}  });
+//   const oldUser =  await this.userRepository.find({where:{tasks:{id:users.id}}  });
+
+//   if (oldUser) {
+//     oldUser.currentTasks -= 1;
+//     await userRepo.save(oldUser);
+//   }
+
+//   task.assignedTo = null;
+//   task.status = 'pending';
+//   await taskRepo.save(task);
+
+//   // run assignment again
+//   await assignTasks();
+// }
+
+ 
+
 
 }

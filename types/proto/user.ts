@@ -20,7 +20,7 @@ export interface Task {
 export interface User {
   id: number;
   userName: string;
-  //userImage: string;
+  userImage: string;
   employeeId: string;
   email: string;
   phone: string;
@@ -28,7 +28,7 @@ export interface User {
   maxTask: number;
   status: boolean;
   skills: string[];
-  roles: string[];
+  roles: string;
   createdAt: Timestamp | undefined;
   updatedAt: Timestamp | undefined;
   tasks: Task[];
@@ -36,7 +36,7 @@ export interface User {
 
 export interface CreateUserRequest {
   userName: string;
-  //userImage: string;
+  userImage: string;
   employeeId: string;
   email: string;
   password: string;
@@ -45,13 +45,13 @@ export interface CreateUserRequest {
   maxTask: number;
   status: boolean;
   skills: string[];
-  roles: string[];
+  roles: string;
 }
 
 export interface UpdateUserRequest {
   id: number;
   userName: string;
-  //userImage: string;
+  userImage: string;
   employeeId: string;
   email: string;
   phone: string;
@@ -59,7 +59,7 @@ export interface UpdateUserRequest {
   maxTask: number;
   status: boolean;
   skills: string[];
-  roles: string[];
+  roles: string;
   tasks: Task[];
 }
 

@@ -1,5 +1,5 @@
 
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { UserEntity } from './user.entity';
 
 @Entity()
@@ -20,7 +20,7 @@ export class TaskEntity {
 //   @Column({nullable: true,type:'simple-array'})
 //   assignedTo: number[];
 
-  @ManyToMany(()=>UserEntity,(userEntity=>userEntity.tasks))
-  users!: UserEntity[];
+  @ManyToOne(()=>UserEntity,(userEntity=>userEntity.tasks))
+  users!: UserEntity;
 
 }

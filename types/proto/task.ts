@@ -22,7 +22,7 @@ export interface Task {
   requiredSkills: string[];
   priority: string;
   status: string;
-  users: User[];
+  users: User | undefined;
 }
 
 export interface CreateTaskRequest {
@@ -30,7 +30,7 @@ export interface CreateTaskRequest {
   requiredSkills: string[];
   priority: string;
   status: string;
-  assignedTo: number[];
+  assignedTo: number;
 }
 
 export interface CreateTaskResponse {
@@ -51,7 +51,7 @@ export interface UpdateTaskRequest {
   requiredSkills: string[];
   priority: string;
   status: string;
-  assignedTo: number[];
+  assignedTo: number;
 }
 
 export interface UpdateTaskResponse {
@@ -74,22 +74,15 @@ export interface ListTasksResponse {
   tasks: Task[];
 }
 
-// export interface AddUserToTaskRequest {
-//   taskId: number;
-//   userId: number;
-// }
-
-// export interface AddUserToTaskResponse {
-//   task: Task | undefined;
-// }
-
-export interface RemoveUserFromTaskRequest {
+export interface AddUserToTaskRequest {
   taskId: number;
-  userId: number;
 }
 
-export interface RemoveUserFromTaskResponse {
+export interface AddUserToTaskResponse {
   task: Task | undefined;
+}
+
+export interface Empty {
 }
 
 export const TASK_PACKAGE_NAME = "task";
@@ -104,6 +97,10 @@ export interface TaskServiceClient {
   deleteTask(request: DeleteTaskRequest): Observable<DeleteTaskResponse>;
 
   listTasks(request: ListTasksRequest): Observable<ListTasksResponse>;
+
+  assignTasks(request: Empty): Observable<ListTasksResponse>;
+
+  manuallyReassignTask(request: AddUserToTaskRequest): Observable<AddUserToTaskResponse>;
 }
 
 export interface TaskServiceController {
@@ -122,11 +119,25 @@ export interface TaskServiceController {
   ): Promise<DeleteTaskResponse> | Observable<DeleteTaskResponse> | DeleteTaskResponse;
 
   listTasks(request: ListTasksRequest): Promise<ListTasksResponse> | Observable<ListTasksResponse> | ListTasksResponse;
+
+  assignTasks(request: Empty): Promise<ListTasksResponse> | Observable<ListTasksResponse> | ListTasksResponse;
+
+  manuallyReassignTask(
+    request: AddUserToTaskRequest,
+  ): Promise<AddUserToTaskResponse> | Observable<AddUserToTaskResponse> | AddUserToTaskResponse;
 }
 
 export function TaskServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["createTask", "getTask", "updateTask", "deleteTask", "listTasks"];
+    const grpcMethods: string[] = [
+      "createTask",
+      "getTask",
+      "updateTask",
+      "deleteTask",
+      "listTasks",
+      "assignTasks",
+      "manuallyReassignTask",
+    ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("TaskService", method)(constructor.prototype[method], method, descriptor);

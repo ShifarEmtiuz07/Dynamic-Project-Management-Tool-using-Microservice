@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { TaskService } from './task.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
-import {  CreateTaskRequest, CreateTaskResponse, DeleteTaskRequest, DeleteTaskResponse, GetTaskRequest, GetTaskResponse, ListTasksRequest, ListTasksResponse, RemoveUserFromTaskRequest, RemoveUserFromTaskResponse, Task, TaskServiceController, TaskServiceControllerMethods, UpdateTaskRequest, UpdateTaskResponse } from './../../../../../types/proto/task';
+import {  CreateTaskRequest, CreateTaskResponse, DeleteTaskRequest, DeleteTaskResponse, Empty, GetTaskRequest, GetTaskResponse, ListTasksRequest, ListTasksResponse, RemoveUserFromTaskRequest, RemoveUserFromTaskResponse, Task, TaskServiceController, TaskServiceControllerMethods, UpdateTaskRequest, UpdateTaskResponse } from './../../../../../types/proto/task';
+import { TaskEntity } from 'libs/shared-entities/src/lib/task.entity';
+import { UserEntity } from 'libs/shared-entities/src/lib/user.entity';
 
 
 @Controller('tasks')
@@ -15,7 +17,7 @@ export class TaskController implements TaskServiceController {
    
     return await this.taskService.createTask(request);
   } 
-  async getTask(request: GetTaskRequest): Promise<GetTaskResponse> {
+  async getTask(request: GetTaskRequest): Promise<Task> {
   
     return await this.taskService.getTask(request.id);
   }
@@ -29,14 +31,32 @@ export class TaskController implements TaskServiceController {
   async deleteTask(request: DeleteTaskRequest): Promise<DeleteTaskResponse> {
     return await this.taskService.deleteTask(request.id);
   }
-  // async addUserToTask(request:AddUserToTaskRequest): Promise<AddUserToTaskResponse> {
-  //   return await this.taskService.addUserToTask(request);
-  // }
-  // async removeUserFromTask(request: RemoveUserFromTaskRequest): Promise<RemoveUserFromTaskResponse> {
-  //   return await this.taskService.removeUserFromTask(request);
-  // }
 
 
+   async assignTasks(request: Empty): Promise<ListTasksResponse> {
+      const result = await this.taskService.assignTasks(request);
+
+  // Map TaskEntity to Task (as an array)
+  const tasks: Task[] = Array.isArray(result)
+    ? result.map((taskEntity: TaskEntity) => ({
+        id: taskEntity.id,
+        title: taskEntity.title,
+        requiredSkills: taskEntity.requiredSkills,
+        priority: taskEntity.priority,
+        status: taskEntity.status,
+        users: taskEntity.users
+          ? {
+              id: taskEntity.users.id,
+              username: taskEntity.users.userName,
+              role: taskEntity.users.roles,
+            }
+          : {},
+      }))
+    : [];
+
+  return { tasks };
+     
+   }
 
  
 }
