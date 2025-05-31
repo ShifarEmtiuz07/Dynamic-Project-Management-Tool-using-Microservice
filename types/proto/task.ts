@@ -22,7 +22,7 @@ export interface Task {
   requiredSkills: string[];
   priority: string;
   status: string;
-  users: User | undefined;
+  users: User | null;
 }
 
 export interface CreateTaskRequest {
@@ -80,6 +80,7 @@ export interface AddUserToTaskRequest {
 
 export interface AddUserToTaskResponse {
   task: Task | undefined;
+  empty: Empty | undefined;
 }
 
 export interface Empty {
@@ -90,9 +91,9 @@ export const TASK_PACKAGE_NAME = "task";
 export interface TaskServiceClient {
   createTask(request: CreateTaskRequest): Observable<CreateTaskResponse>;
 
-  getTask(request: GetTaskRequest): Observable<GetTaskResponse>;
+  getTask(request: GetTaskRequest): Observable<Task>;
 
-  updateTask(request: UpdateTaskRequest): Observable<UpdateTaskResponse>;
+  updateTask(request: UpdateTaskRequest): Observable<Task>;
 
   deleteTask(request: DeleteTaskRequest): Observable<DeleteTaskResponse>;
 
@@ -100,7 +101,7 @@ export interface TaskServiceClient {
 
   assignTasks(request: Empty): Observable<ListTasksResponse>;
 
-  manuallyReassignTask(request: AddUserToTaskRequest): Observable<AddUserToTaskResponse>;
+  manuallyReassignTask(request: AddUserToTaskRequest): Observable<ListTasksResponse>;
 }
 
 export interface TaskServiceController {
@@ -108,11 +109,9 @@ export interface TaskServiceController {
     request: CreateTaskRequest,
   ): Promise<CreateTaskResponse> | Observable<CreateTaskResponse> | CreateTaskResponse;
 
-  getTask(request: GetTaskRequest): Promise<GetTaskResponse> | Observable<GetTaskResponse> | GetTaskResponse;
+  getTask(request: GetTaskRequest): Promise<Task> | Observable<Task> | Task;
 
-  updateTask(
-    request: UpdateTaskRequest,
-  ): Promise<UpdateTaskResponse> | Observable<UpdateTaskResponse> | UpdateTaskResponse;
+  updateTask(request: UpdateTaskRequest): Promise<Task> | Observable<Task> | Task;
 
   deleteTask(
     request: DeleteTaskRequest,
@@ -124,7 +123,7 @@ export interface TaskServiceController {
 
   manuallyReassignTask(
     request: AddUserToTaskRequest,
-  ): Promise<AddUserToTaskResponse> | Observable<AddUserToTaskResponse> | AddUserToTaskResponse;
+  ): Promise<ListTasksResponse> | Observable<ListTasksResponse> | ListTasksResponse;
 }
 
 export function TaskServiceControllerMethods() {

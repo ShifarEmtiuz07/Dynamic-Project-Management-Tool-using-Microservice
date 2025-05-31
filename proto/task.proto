@@ -26,7 +26,7 @@ message CreateTaskRequest {
   repeated string requiredSkills = 2;
   string priority = 3;
   string status = 4;
-   int32 assignedTo = 5;
+  int32 assignedTo = 5;
 }
 
 message CreateTaskResponse {
@@ -49,7 +49,7 @@ message UpdateTaskRequest {
   repeated string requiredSkills = 3;
   string priority = 4;
   string status = 5;
-   int32 assignedTo = 6;
+  int32 assignedTo = 6;
  
 }
 
@@ -82,6 +82,7 @@ message AddUserToTaskRequest {
 
 message AddUserToTaskResponse {
   Task task = 1;
+  Empty empty=2;
 }
 
 message Empty {}
@@ -92,11 +93,11 @@ message Empty {}
 
 service TaskService {
   rpc createTask(CreateTaskRequest) returns (CreateTaskResponse) {}
-  rpc getTask(GetTaskRequest) returns (GetTaskResponse) {}
-  rpc updateTask(UpdateTaskRequest) returns (UpdateTaskResponse) {}
+  rpc getTask(GetTaskRequest) returns (Task) {}
+  rpc updateTask(UpdateTaskRequest) returns (Task) {}
   rpc deleteTask(DeleteTaskRequest) returns (DeleteTaskResponse) {}
   rpc listTasks(ListTasksRequest) returns (ListTasksResponse) {}
   rpc assignTasks(Empty) returns (ListTasksResponse) {}
-  rpc manuallyReassignTask(AddUserToTaskRequest) returns (AddUserToTaskResponse) {}
+  rpc manuallyReassignTask(AddUserToTaskRequest) returns (ListTasksResponse) {}
 
 }
