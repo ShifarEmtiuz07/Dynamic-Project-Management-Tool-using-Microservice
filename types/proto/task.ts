@@ -30,7 +30,6 @@ export interface CreateTaskRequest {
   requiredSkills: string[];
   priority: string;
   status: string;
-  assignedTo: number;
 }
 
 export interface CreateTaskResponse {

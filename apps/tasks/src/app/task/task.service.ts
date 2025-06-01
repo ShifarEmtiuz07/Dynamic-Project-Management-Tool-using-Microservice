@@ -22,14 +22,14 @@ export class TaskService {
 
 
       console.log( createTask);
-      const userId:number = createTask.assignedTo ;
-       console.log( userId);
-        const user= await this.userRepository.findOne({ where: { id: userId } });
+      // const userId:number = createTask.assignedTo ;
+      //  console.log( userId);
+      //   const user= await this.userRepository.findOne({ where: { id: userId } });
 
 
-        if(!user) {
-          throw new Error(`User with ID ${userId} not found`);
-        }
+      //   if(!user) {
+      //     throw new Error(`User with ID ${userId} not found`);
+      //   }
   const task =await this.taskRepository.create({
   title: createTask.title,
   requiredSkills: createTask.requiredSkills,
@@ -48,11 +48,12 @@ const savedTask = await this.taskRepository.save(task);
         requiredSkills: savedTask.requiredSkills,
         priority: savedTask.priority,
         status: savedTask.status,
-       users: {
-          id: savedTask.users.id,
-          username: savedTask.users.userName,
-          role: savedTask.users.roles // Assuming roles is an array
-       }
+       users: null,
+      //  {
+      //     id: savedTask.users.id,
+      //     username: savedTask.users.userName,
+      //     role: savedTask.users.roles // Assuming roles is an array
+      //  }
        }
 
         return { message: 'Task created successfully', task: createNewTask };
@@ -223,8 +224,10 @@ catch(error) {
 }
 
  async assignTasks(request:Empty): Promise<ListTasksResponse> {
-   const tasks = await this.taskRepository.find({ where: { status: 'pending',  } }); //users: null
+   const tasks = await this.taskRepository.find({ where: { status: 'Pending',  } }); //users: null
+  
   const users = await this.userRepository.find();
+ 
 
   for (const task of tasks) {
     let bestUser = null;
@@ -244,10 +247,12 @@ catch(error) {
 
       task.users = bestUser.id;
       task.status = 'in_progress';
-      bestUser.currentTasks += 1;
+      bestUser.currentTask += 1;
 
       await this.taskRepository.save(task);
+       console.log('Tasks to be assigned from function:', task);
       await this.userRepository.save(bestUser);
+       console.log('Users available for assignment:', bestUser);
     }
 
     // const  assignedTasks={
@@ -286,14 +291,17 @@ catch(error) {
 
  async  manuallyReassignTask(request): Promise<ListTasksResponse> {
 
-  const taskId = request.id;
+  const taskId = request.taskId;
+ 
   if (!taskId) {      
     throw new Error('Task ID is required for reassignment');
   }
   const emprty = request.empty;
 
-  const task =  await this.taskRepository.findOne({where:{id: taskId}  });
+  const task =  await this.taskRepository.findOne({where:{id: taskId},relations: ['users']});
+ 
   const oldUser =  await this.userRepository.findOne({ where: { id: task.users.id } });
+  
   if (!task) {  
     throw new Error(`Task with ID ${taskId} not found`);
   }
@@ -305,15 +313,20 @@ catch(error) {
   if (oldUser) {
     oldUser.currentTask -= 1;
    await this.userRepository.save(oldUser);
+     //console.log('Old User:', oldUser);
   }
 
-  task.users = null;
-  task.status = 'pending';
+  //task.users= null;
+  task.status = 'Pending';
  await this.taskRepository.save(task);
+ //console.log('Task after save:', task);
 
-    const tasks = await this.taskRepository.find({ where: { status: 'pending',  } });
+    const tasks = await this.taskRepository.find({ where: { status: 'Pending',  },relations: ['users'] }); 
+    //console.log('Tasks after reassignment:', tasks);
 
-  // run assignment again
+    //console.log('Tasks after reassignment:', tasks);
+
+  
   await this.assignTasks(emprty);
       return {
       tasks: tasks.map(task => ({

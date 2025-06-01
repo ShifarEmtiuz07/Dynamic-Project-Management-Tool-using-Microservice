@@ -15,7 +15,7 @@ export class UserManagementController implements OnModuleInit {
 
     @Post()
     createUser(@Body() request: CreateUserRequest ){
-    
+     
         return this.userManagementService.createUser(request);
     }
 

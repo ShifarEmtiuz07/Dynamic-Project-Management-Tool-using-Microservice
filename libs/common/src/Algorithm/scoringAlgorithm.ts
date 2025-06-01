@@ -11,9 +11,9 @@ export const calculateScore = (user:UserEntity, task:TaskEntity) => {
   score += availability; // more availability = higher score
 
   switch (task.priority) {
-    case 'high': score += 30; break;
-    case 'medium': score += 20; break;
-    case 'low': score += 10; break;
+    case 'High': score += 30; break;
+    case 'Medium': score += 20; break;
+    case 'Low': score += 10; break;
   }
 
   return score;

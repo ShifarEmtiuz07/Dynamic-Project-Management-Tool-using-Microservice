@@ -29,7 +29,8 @@ export class TasksController implements OnModuleInit {
     }
 
        @Post('reassign-tasks')
-    manuallyReassignTask(request:AddUserToTaskRequest): Observable<ListTasksResponse> {
+    manuallyReassignTask(@Body() request:AddUserToTaskRequest): Observable<ListTasksResponse> {
+        //console.log('Reassigning task with request:', request);
        
         return this.taskService.manuallyReassignTask(request);
     }

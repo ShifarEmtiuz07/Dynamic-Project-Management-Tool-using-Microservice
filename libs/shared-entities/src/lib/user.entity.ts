@@ -13,9 +13,6 @@ export class UserEntity {
   @Column()
   userName!: string;
 
-  @Column({nullable: true})
- userImage!: string;
-
   @Column({ nullable: true, unique: true })
   employeeId!: string;
 
@@ -32,7 +29,7 @@ export class UserEntity {
   @Column()
   currentTask!: number;
 
-  @Column()
+  @Column({nullable: true})
   maxTask!: number;
 
   @Column({ type: 'boolean', nullable: true })

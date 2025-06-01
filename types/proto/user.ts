@@ -20,7 +20,6 @@ export interface Task {
 export interface User {
   id: number;
   userName: string;
-  //userImage: string;
   employeeId: string;
   email: string;
   phone: string;
@@ -36,7 +35,6 @@ export interface User {
 
 export interface CreateUserRequest {
   userName: string;
-  //userImage: string;
   employeeId: string;
   email: string;
   password: string;
@@ -51,7 +49,6 @@ export interface CreateUserRequest {
 export interface UpdateUserRequest {
   id: number;
   userName: string;
-  //userImage: string;
   employeeId: string;
   email: string;
   phone: string;

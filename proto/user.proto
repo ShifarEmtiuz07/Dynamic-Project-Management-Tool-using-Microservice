@@ -13,48 +13,45 @@ message Task{
 message User {
   int32 id = 1;
   string userName = 2;
-  string userImage = 3;
-  string employeeId = 4;
-  string email = 5;
-  string phone = 6;
-  int32 currentTask = 7;
-  int32 maxTask = 8;
-  bool status = 9;
-  repeated string skills = 10;
-  string roles = 11;
-  google.protobuf.Timestamp created_at = 12;
-  google.protobuf.Timestamp updated_at = 13;
-  repeated Task tasks=14;
+  string employeeId = 3;
+  string email =4;
+  string phone =5;
+  int32 currentTask =6;
+  int32 maxTask =7;
+  bool status =8;
+  repeated string skills = 9;
+  string roles =10 ;
+  google.protobuf.Timestamp created_at = 11;
+  google.protobuf.Timestamp updated_at = 12;
+  repeated Task tasks=13;
 }
 
 
 message CreateUserRequest {
   string userName = 1;
-  string userImage = 2;
-  string employeeId = 3;
-  string email = 4;
-  string password = 5;
-  string phone = 6;
-  int32 currentTask = 7;
-  int32 maxTask = 8;
-  bool status = 9;
-  repeated string skills = 10;
-  string roles = 11;
+  string employeeId = 2;
+  string email = 3;
+  string password = 4;
+  string phone = 5;
+  int32 currentTask = 6;
+  int32 maxTask = 7;
+  bool status = 8;
+  repeated string skills = 9;
+  string roles = 10;
 }
 
 message UpdateUserRequest {
   int32 id = 1;
   string userName = 2;
-  string userImage = 3;
-  string employeeId = 4;
-  string email = 5;
-  string phone = 6;
-  int32 currentTask = 7;
-  int32 maxTask = 8;
-  bool status = 9;
-  repeated string skills = 10;
-  string roles = 11;
-  repeated Task tasks=12;
+  string employeeId = 3;
+  string email = 4;
+  string phone = 5;
+  int32 currentTask = 6;
+  int32 maxTask = 7;
+  bool status = 8;
+  repeated string skills = 9;
+  string roles = 10;
+  repeated Task tasks=11;
 }
 
 
