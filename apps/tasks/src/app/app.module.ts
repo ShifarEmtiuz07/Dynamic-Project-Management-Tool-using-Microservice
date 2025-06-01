@@ -8,6 +8,7 @@ import { TaskEntity } from '../../../../libs/shared-entities/src/lib/task.entity
 import { UserEntity } from '../../../../libs/shared-entities/src/lib/user.entity';
 import { TaskController } from './task/task.controller';
 import { TaskService } from './task/task.service';
+import { NotificationPublisherService } from './task/notificationPublisher.service';
 
 @Module({
   imports: [
@@ -16,7 +17,8 @@ DatabaseModule,
     TaskModule,
     TypeOrmModule.forFeature([TaskEntity,UserEntity]),
   ],
-  controllers: [AppController,TaskController],
-  providers: [AppService,TaskService],
+  controllers: [AppController],
+  providers: [AppService]
+  
 })
 export class AppModule {}

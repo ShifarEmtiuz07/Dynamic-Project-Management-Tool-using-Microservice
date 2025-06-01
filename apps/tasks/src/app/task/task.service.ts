@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 import { TaskEntity } from '../../../../../libs/shared-entities/src/lib/task.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from '../../../../../libs/shared-entities/src/lib/user.entity';
+import { NotificationPublisherService } from './notificationPublisher.service';
 
 
 @Injectable()
@@ -14,8 +15,8 @@ export class TaskService {
 
   constructor(
     @InjectRepository(TaskEntity) private readonly taskRepository: Repository<TaskEntity>,
-    @InjectRepository(UserEntity) private readonly userRepository: Repository<UserEntity>
-  
+    @InjectRepository(UserEntity) private readonly userRepository: Repository<UserEntity>,
+     private readonly notificationPublisher: NotificationPublisherService, 
   ){}
   async createTask(createTask: CreateTaskRequest) {
     try{
@@ -39,6 +40,15 @@ export class TaskService {
   users:null,
 });
 const savedTask = await this.taskRepository.save(task);
+
+  const users = await this.userRepository.find();
+  const usersId:number[]= users.map(user => user.id);
+  //console.log('Users ID:', usersId);
+
+await this.notificationPublisher.notifyAllUsers(
+  usersId,
+  `A new task "${savedTask.title}" has been created.`
+);
 
 //console.log('Task created:', savedTask);
 
@@ -184,6 +194,12 @@ async listTasks(): Promise<ListTasksResponse> {
       //assignedTo: request.assignedTo,
 
     const updatedTask = await this.taskRepository.save(task);
+
+    
+await this.notificationPublisher.notifyAllUsers(
+  [/*admin or supervisor IDs*/],
+  `Task "${task.title}" has been updated.`
+);
    return {      
       id: updatedTask.id,
       title: updatedTask.title,
@@ -250,9 +266,14 @@ catch(error) {
       bestUser.currentTask += 1;
 
       await this.taskRepository.save(task);
-       console.log('Tasks to be assigned from function:', task);
+     
       await this.userRepository.save(bestUser);
-       console.log('Users available for assignment:', bestUser);
+
+      await this.notificationPublisher.notifyUser(
+    bestUser.id,
+    `You have been assigned a new task: "${task.title}".`
+  );
+      
     }
 
     // const  assignedTasks={

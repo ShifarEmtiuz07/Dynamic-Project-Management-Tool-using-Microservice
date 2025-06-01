@@ -1,0 +1,22 @@
+services:
+  task-service:
+    build:
+      context: .
+      dockerfile: apps/tasks/Dockerfile
+    command: ["node", "dist/main"]
+    depends_on:
+      - rabbitmq
+
+  notification-service:
+    build:
+      context: .
+      dockerfile: apps/notification/Dockerfile
+    command: ["node", "dist/main"]
+    depends_on:
+      - rabbitmq
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"

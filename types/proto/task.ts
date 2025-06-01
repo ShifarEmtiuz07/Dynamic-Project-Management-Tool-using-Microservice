@@ -22,7 +22,7 @@ export interface Task {
   requiredSkills: string[];
   priority: string;
   status: string;
-  users: User | null;
+  users: User | undefined;
 }
 
 export interface CreateTaskRequest {

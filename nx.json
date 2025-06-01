@@ -43,7 +43,8 @@
         "apps/products-e2e/**/*",
         "apps/projects-e2e/**/*",
         "apps/userManagement-e2e/**/*",
-        "apps/tasks-e2e/**/*"
+        "apps/tasks-e2e/**/*",
+        "apps/notification-e2e/**/*"
       ]
     }
   ],
