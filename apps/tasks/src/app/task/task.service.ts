@@ -22,7 +22,7 @@ export class TaskService {
     try{
 
 
-      console.log( createTask);
+      // console.log( createTask);
       // const userId:number = createTask.assignedTo ;
       //  console.log( userId);
       //   const user= await this.userRepository.findOne({ where: { id: userId } });
@@ -195,11 +195,21 @@ async listTasks(): Promise<ListTasksResponse> {
 
     const updatedTask = await this.taskRepository.save(task);
 
-    
-await this.notificationPublisher.notifyAllUsers(
-  [/*admin or supervisor IDs*/],
-  `Task "${task.title}" has been updated.`
+    if(user){
+           await this.notificationPublisher.notifyUser(
+        user.id,
+        `Task: "${task.title}" has been updated.`
+       
+      );
+    }else{ 
+      const users = await this.userRepository.find();
+  const usersId:number[]= users.map(user => user.id);
+           await this.notificationPublisher.notifyAllUsers(
+  usersId,
+  `Task: "${task.title}" has been updated.`
 );
+    }
+
    return {      
       id: updatedTask.id,
       title: updatedTask.title,
@@ -275,21 +285,6 @@ catch(error) {
   );
       
     }
-
-    // const  assignedTasks={
-    //   id: task.id,
-    //   title: task.title,
-    //   requiredSkills: task.requiredSkills,
-    //   priority: task.priority,
-    //   status: task.status,
-    //   users: {
-    //     id: bestUser.id,
-    //     username: bestUser.userName,
-    //     role: bestUser.roles.map(role => role).join(', '), // Assuming roles is an array
-    //   }   
-    //  };
-
-    // return {task: assignedTasks };
   }
 
       return {
@@ -299,11 +294,12 @@ catch(error) {
         requiredSkills: task.requiredSkills,
         priority: task.priority,
         status: task.status,
-        users: {
-          id: task.users.id,
-          username: task.users.userName,
-          role: task.users.roles,
-        },
+        users: task.users ?
+        {
+       id: task.users.id,
+       username: task.users.userName,
+       role: task.users.roles,
+       } : null
       })),
     };
 
@@ -334,6 +330,10 @@ catch(error) {
   if (oldUser) {
     oldUser.currentTask -= 1;
    await this.userRepository.save(oldUser);
+         await this.notificationPublisher.notifyUser(
+    oldUser.id,
+    `The task: "${task.title} is removed ".`
+  );
      //console.log('Old User:', oldUser);
   }
 

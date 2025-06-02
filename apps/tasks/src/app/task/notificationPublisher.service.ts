@@ -9,7 +9,7 @@ export class NotificationPublisherService {
   ) {}
 
   async notifyUser(userId: number, message: string) {
-    console.log('Notifying  NotificationPublisherService user:', userId, 'with message:', message);
+   // console.log('Notifying  NotificationPublisherService user:', userId, 'with message:', message);
     this.client.emit('task_notification', {
       userId,
       message,
@@ -18,7 +18,7 @@ export class NotificationPublisherService {
 
     async notifyAllUsers(userIds: number[], message: string) {
 
-      console.log('Notifying users:', userIds, 'with message:', message);
+      //console.log('Notifying users:', userIds, 'with message:', message);
     for (const id of userIds) {
       await this.notifyUser(id, message);
     }

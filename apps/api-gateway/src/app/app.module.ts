@@ -13,12 +13,12 @@ import { UserManagementController } from './userManagement/user-management.contr
 
 import { TASK_PACKAGE_NAME } from 'types/proto/task';
 import { TasksController } from './tasks/tasks.controller';
-
+import { AuthController } from './auth.controller';
+import { AuthController } from './auth/auth.controller';
 
 @Module({
   imports: [
- 
-  ClientsModule.register([
+    ClientsModule.register([
       {
         name: PRODUCTS_PACKAGE_NAME,
         transport: Transport.GRPC,
@@ -55,7 +55,7 @@ import { TasksController } from './tasks/tasks.controller';
         },
       },
 
-        {
+      {
         name: TASK_PACKAGE_NAME,
         transport: Transport.GRPC,
         options: {
@@ -70,7 +70,6 @@ import { TasksController } from './tasks/tasks.controller';
           // },
         },
       },
-
     ]),
   ],
   controllers: [
@@ -79,6 +78,7 @@ import { TasksController } from './tasks/tasks.controller';
     ProjectController,
     UserManagementController,
     TasksController,
+    AuthController,
   ],
   providers: [AppService],
 })
