@@ -13,11 +13,21 @@ import { UserManagementController } from './userManagement/user-management.contr
 
 import { TASK_PACKAGE_NAME } from 'types/proto/task';
 import { TasksController } from './tasks/tasks.controller';
-import { AuthController } from './auth.controller';
-import { AuthController } from './auth/auth.controller';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
+
+
 
 @Module({
   imports: [
+          ThrottlerModule.forRoot({
+      throttlers: [
+        {
+        ttl: 60000,
+          limit: 5,
+        },
+      ],
+    }),
     ClientsModule.register([
       {
         name: PRODUCTS_PACKAGE_NAME,
@@ -78,8 +88,11 @@ import { AuthController } from './auth/auth.controller';
     ProjectController,
     UserManagementController,
     TasksController,
-    AuthController,
+ 
   ],
-  providers: [AppService],
+  providers: [AppService,{
+  provide: APP_GUARD,
+  useClass: ThrottlerGuard
+}],
 })
 export class AppModule {}
