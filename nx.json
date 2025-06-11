@@ -44,7 +44,8 @@
         "apps/projects-e2e/**/*",
         "apps/userManagement-e2e/**/*",
         "apps/tasks-e2e/**/*",
-        "apps/notification-e2e/**/*"
+        "apps/notification-e2e/**/*",
+        "apps/auth-e2e/**/*"
       ]
     }
   ],

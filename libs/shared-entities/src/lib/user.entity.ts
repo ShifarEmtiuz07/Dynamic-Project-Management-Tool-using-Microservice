@@ -51,7 +51,7 @@ export class UserEntity {
 
   
   @OneToMany(()=>TaskEntity,(taskEntity=>taskEntity.users))
-  @JoinTable()
+   @JoinTable()
   tasks!: TaskEntity[];
 
 

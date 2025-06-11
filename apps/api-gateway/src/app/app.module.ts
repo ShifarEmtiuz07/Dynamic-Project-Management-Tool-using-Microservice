@@ -13,8 +13,9 @@ import { UserManagementController } from './userManagement/user-management.contr
 
 import { TASK_PACKAGE_NAME } from 'types/proto/task';
 import { TasksController } from './tasks/tasks.controller';
-import { AuthController } from './auth.controller';
+
 import { AuthController } from './auth/auth.controller';
+import { AUTH_PACKAGE_NAME } from './../../../../types/proto/auth';
 
 @Module({
   imports: [
@@ -62,12 +63,15 @@ import { AuthController } from './auth/auth.controller';
           package: TASK_PACKAGE_NAME,
           protoPath: join(__dirname, 'proto/task.proto'),
           url: 'localhost:5003',
-          // loader: {
-          //   includeDirs: [
-          //     path.resolve(__dirname, 'proto'),
-          //     path.resolve(__dirname, '../../node_modules/google-proto-files'),
-          //   ],
-          // },
+        },
+      },
+           {
+        name: AUTH_PACKAGE_NAME,
+        transport: Transport.GRPC,
+        options: {
+          package: AUTH_PACKAGE_NAME,
+          protoPath: join(__dirname, 'proto/auth.proto'),
+          url: 'localhost:5004',
         },
       },
     ]),
