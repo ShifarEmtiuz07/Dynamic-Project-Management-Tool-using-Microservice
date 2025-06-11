@@ -1,6 +1,9 @@
 import { Body, Controller, Delete, Get, Inject, OnModuleInit, Param, Patch, Post } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
+import { Throttle } from '@nestjs/throttler';
 import { CreateUserRequest, Empty, UpdateUserRequest, USER_PACKAGE_NAME, USER_SERVICE_NAME, UserId, UserServiceClient } from 'types/proto/user';
+
+
 
 @Controller('user-management')
 export class UserManagementController implements OnModuleInit {
@@ -23,6 +26,7 @@ export class UserManagementController implements OnModuleInit {
     getUser(@Param('id') id:number){
          return this.userManagementService.getUser({id});
     }
+
 
     @Get()
     listUsers(request: Empty){
