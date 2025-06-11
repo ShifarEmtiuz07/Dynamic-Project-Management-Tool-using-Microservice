@@ -20,3 +20,35 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+
+  userManagement-service:
+    build:
+      context: .
+      dockerfile: apps/userManagement/Dockerfile
+    command: ["node", "dist/main"]
+    depends_on:
+      - rabbitmq
+
+  projects-service:
+    build:
+      context: .
+      dockerfile: apps/projects/Dockerfile
+    command: ["node", "dist/main"]
+    depends_on:
+      - rabbitmq
+
+  products-service:
+    build:
+      context: .
+      dockerfile: apps/products/Dockerfile
+    command: ["node", "dist/main"]
+    depends_on:
+      - rabbitmq
+
+  api-gateway-service:
+    build:
+      context: .
+      dockerfile: apps/api-gateway/Dockerfile
+    command: ["node", "dist/main"]
+    depends_on:
+      - rabbitmq
