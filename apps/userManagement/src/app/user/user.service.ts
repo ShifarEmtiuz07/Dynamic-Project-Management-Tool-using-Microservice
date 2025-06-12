@@ -6,6 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from '../../../../../libs/shared-entities/src/lib/user.entity';
 import { Repository } from 'typeorm';
 import { Role as EntityRole } from 'libs/common/src/utils/role.enum';
+import * as bcrypt from 'bcryptjs';
 
 
 
@@ -43,12 +44,16 @@ export class UserService {
 
   async createUser(createUserDto: CreateUserRequest): Promise<User> {
 
+     const password = createUserDto.password;
+      const salt = bcrypt.genSaltSync(10);
+      const hashedPassword = bcrypt.hashSync(password, salt);
+
 
     const user= this.userRepository.create({
       userName:createUserDto.userName,
       employeeId:createUserDto.employeeId,
       email:createUserDto.email,
-      password:createUserDto.password,
+      password:hashedPassword,
       phone:createUserDto.phone,
       maxTask:createUserDto.maxTask,
       currentTask:createUserDto.currentTask,

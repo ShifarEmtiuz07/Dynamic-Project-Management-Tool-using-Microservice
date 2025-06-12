@@ -6,10 +6,11 @@ import { UserEntity } from 'libs/shared-entities/src/lib/user.entity';
 import { JwtModule } from '@nestjs/jwt';
      import { ConfigModule, ConfigService } from '@nestjs/config';
      import { HttpModule } from '@nestjs/axios';
+import { TaskEntity } from 'libs/shared-entities/src/lib/task.entity';
     
 
 @Module({
-  imports: [ TypeOrmModule.forFeature([UserEntity]),
+  imports: [ TypeOrmModule.forFeature([UserEntity,TaskEntity]),
   
     JwtModule.registerAsync({
       imports: [ConfigModule.forRoot()],

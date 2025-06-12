@@ -9,10 +9,12 @@ import { UserModule } from './user/user.module';
 import { UserController } from './user/user.controller';
 import { UserService } from './user/user.service';
 import { TaskEntity } from 'libs/shared-entities/src/lib/task.entity';
+
  
 
 @Module({
-  imports: [DatabaseModule,UserModule,TypeOrmModule.forFeature([UserEntity,TaskEntity])],
+  imports: [DatabaseModule,UserModule,TypeOrmModule.forFeature([UserEntity,TaskEntity]),
+],
 
 
 controllers: [AppController,UserController],

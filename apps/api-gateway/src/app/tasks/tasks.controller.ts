@@ -1,8 +1,11 @@
-import { Body, Controller, Delete, Get, Inject, OnModuleInit, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, OnModuleInit, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import {  AddUserToTaskRequest, CreateTaskRequest, CreateTaskResponse, DeleteTaskRequest, DeleteTaskResponse, Empty, GetTaskRequest, GetTaskResponse, ListTasksRequest, ListTasksResponse, TASK_PACKAGE_NAME, TASK_SERVICE_NAME, TaskServiceClient, UpdateTaskRequest, UpdateTaskResponse } from './../../../../../types/proto/task';
 import { ClientGrpc } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
 import { Task } from 'types/proto/user';
+import { Roles } from 'libs/common/src/guard/roles.decorator';
+import { RolesGuard } from 'libs/common/src/guard/roles.guard';
+import { AuthGuard } from 'libs/common/src/guard/auth.guard';
 
 
 @Controller('tasks')
@@ -15,6 +18,9 @@ export class TasksController implements OnModuleInit {
     this.taskService = this.client.getService<TaskServiceClient>(TASK_SERVICE_NAME);
   }
 
+@Roles('hr')
+@UseGuards(RolesGuard)
+@UseGuards(AuthGuard)
   @Post()
     createTask(@Body() request: CreateTaskRequest): Observable<CreateTaskResponse> {
        
@@ -22,12 +28,19 @@ export class TasksController implements OnModuleInit {
         return this.taskService.createTask(request);
     }
 
+    
+@Roles('hr')
+@UseGuards(RolesGuard)
+@UseGuards(AuthGuard)
     @Post('assign-tasks')
     assignTasks(request:Empty): Observable<ListTasksResponse> {
        
         return this.taskService.assignTasks(request);
     }
-
+      
+@Roles('hr')
+@UseGuards(RolesGuard)
+@UseGuards(AuthGuard)
        @Post('reassign-tasks')
     manuallyReassignTask(@Body() request:AddUserToTaskRequest): Observable<ListTasksResponse> {
         //console.log('Reassigning task with request:', request);
@@ -36,23 +49,40 @@ export class TasksController implements OnModuleInit {
     }
 
 
+    
+@Roles('hr')
+@UseGuards(RolesGuard)
+@UseGuards(AuthGuard)
    @Get(':id')
     getTask(@Param('id') id: number): Observable<Task> { 
        
         return this.taskService.getTask({id});   
     }  
     
+    
+@Roles('hr')
+@UseGuards(RolesGuard)
+@UseGuards(AuthGuard)
     @Get('all-tasks')
     listTasks(request: ListTasksRequest): Observable<ListTasksResponse> {
         
         return this.taskService.listTasks(request);
     }
 
+    
+@Roles('hr')
+@UseGuards(RolesGuard)
+@UseGuards(AuthGuard)
     @Patch()
     updateTask(request: UpdateTaskRequest): Observable<Task> {
 
         return this.taskService.updateTask(request);
     }
+
+    
+@Roles('hr')
+@UseGuards(RolesGuard)
+@UseGuards(AuthGuard)
     @Delete()
     deleteTask(request: DeleteTaskRequest): Observable<DeleteTaskResponse> {    
         

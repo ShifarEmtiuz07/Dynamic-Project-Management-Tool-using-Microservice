@@ -1,8 +1,38 @@
+version: '3.8'
 services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: pg
+    restart: always
+    ports:
+     - "5433:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: db_password
+      POSTGRES_DB: micro-task
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: nestjs-pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@example.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    ports:
+      - '5050:80'
+    depends_on:
+      - postgres
+
   task-service:
     build:
       context: .
       dockerfile: apps/tasks/Dockerfile
+    container_name: task-service
+    env_file:
+      - .env
+    ports:
+      - '5003:5003'
     command: ["node", "dist/main"]
     depends_on:
       - rabbitmq
@@ -10,7 +40,13 @@ services:
   notification-service:
     build:
       context: .
+      
       dockerfile: apps/notification/Dockerfile
+    container_name: notification-service
+    env_file:
+      - .env
+    ports:
+      - '5004:5004'
     command: ["node", "dist/main"]
     depends_on:
       - rabbitmq
@@ -21,34 +57,74 @@ services:
       - "5672:5672"
       - "15672:15672"
 
-  userManagement-service:
+  usermanagement-service:
     build:
       context: .
+     
       dockerfile: apps/userManagement/Dockerfile
+    container_name: usermanagement-service
+    env_file:
+      - .env
+    ports:
+      - '5002:5002'
     command: ["node", "dist/main"]
     depends_on:
-      - rabbitmq
+      - postgres
 
   projects-service:
     build:
       context: .
       dockerfile: apps/projects/Dockerfile
+    container_name: projects-service
+    env_file:
+      - .env
+    ports:
+      - '5006:5006'
     command: ["node", "dist/main"]
     depends_on:
-      - rabbitmq
+      - postgres
 
   products-service:
     build:
       context: .
       dockerfile: apps/products/Dockerfile
+    container_name: products-service
+    env_file:
+      - .env
+    ports:
+      - '5005:5005'
     command: ["node", "dist/main"]
     depends_on:
-      - rabbitmq
+      - postgres
 
   api-gateway-service:
     build:
       context: .
+     
       dockerfile: apps/api-gateway/Dockerfile
+    container_name: api-gateway
+    env_file:
+      - .env
+    ports:
+      - '3000:3000'
     command: ["node", "dist/main"]
     depends_on:
-      - rabbitmq
+      - task-service
+      - notification-service
+      - usermanagement-service
+      - projects-service
+      - products-service
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: apps/auth/Dockerfile
+    container_name: auth-service
+    ports:
+       - "5001:5001"
+    depends_on:
+      - postgres
+
+volumes:
+  pgdata:
+    

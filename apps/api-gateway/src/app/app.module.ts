@@ -18,11 +18,15 @@ import { AuthController } from './auth/auth.controller';
 import { AUTH_PACKAGE_NAME } from './../../../../types/proto/auth';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+import { JwtModule } from '@nestjs/jwt';
 
 
 
 @Module({
   imports: [
+        JwtModule.register({
+      secret: process.env.JWT_SECRET ,
+    }),
           ThrottlerModule.forRoot({
       throttlers: [
         {
@@ -94,6 +98,7 @@ import { APP_GUARD } from '@nestjs/core';
     ProjectController,
     UserManagementController,
     TasksController,
+    AuthController
  
   ],
   providers: [AppService,{

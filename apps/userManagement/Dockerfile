@@ -13,9 +13,11 @@ COPY ../../proto ./proto
 COPY ../../types ./types
 
 RUN npm install
+COPY . .
 
 # Build only the tasks app
 RUN npm run build userManagement
+EXPOSE 5002
 
 WORKDIR /usr/src/app/apps/userManagement
 

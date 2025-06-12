@@ -14,8 +14,12 @@ COPY ../../types ./types
 
 RUN npm install
 
+COPY . .
+
 # Build only the tasks app
 RUN npm run build api-gateway
+
+EXPOSE 3000
 
 WORKDIR /usr/src/app/apps/api-gateway
 

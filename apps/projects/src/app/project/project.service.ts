@@ -3,7 +3,7 @@ import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { CreateProjectRequest, ProjectRequest, ProjectResponse } from 'types/proto/project';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Project } from './entities/project.entity';
+import { Project } from '../../../../../libs/shared-entities/src/lib/project.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()

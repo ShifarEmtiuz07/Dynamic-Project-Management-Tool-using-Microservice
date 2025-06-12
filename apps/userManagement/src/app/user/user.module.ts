@@ -1,3 +1,4 @@
+
 import { Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
@@ -8,8 +9,7 @@ import { TaskEntity } from 'libs/shared-entities/src/lib/task.entity';
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity,TaskEntity])], // Add your UserEntity here if needed
-  // TypeOrmModule.forFeature([UserEntity]), // Uncomment and import UserEntity if you have it defined          
+  imports: [TypeOrmModule.forFeature([UserEntity,TaskEntity])], 
   controllers: [UserController],
 
   providers: [UserService],

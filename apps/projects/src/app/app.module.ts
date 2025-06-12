@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { ProjectModule } from './project/project.module';
 import { DatabaseModule } from './../../../../libs/common/src/Database/database.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Project } from './project/entities/project.entity';
+import { Project } from '../../../../libs/shared-entities/src/lib/project.entity';
 
 
 @Module({

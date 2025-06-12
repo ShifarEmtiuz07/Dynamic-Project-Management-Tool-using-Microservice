@@ -6,8 +6,8 @@ import { AppService } from './app.service';
 import { ProductController } from './products/product.controller';
 import { ProductsModule } from './products/products.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Product } from './products/entities/product.entity';
-import { Project } from 'apps/projects/src/app/project/entities/project.entity';
+import { Product } from 'libs/shared-entities/src/lib/product.entity';
+import { Project } from 'libs/shared-entities/src/lib/project.entity';
 
 @Module({
   imports: [

@@ -16,6 +16,7 @@ RUN npm install
 
 # Build only the tasks app
 RUN npm run build projects
+EXPOSE 5006
 
 WORKDIR /usr/src/app/apps/projects
 

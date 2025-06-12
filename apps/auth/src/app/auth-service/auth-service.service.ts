@@ -18,6 +18,8 @@ export class AuthServiceService {
      try {
       const user = await this.userRepository.findOne({where: { email: request.email } });
 
+      //console.log(user)
+
       if (!user) {
         throw new UnauthorizedException('User not found');
       }
@@ -25,9 +27,9 @@ export class AuthServiceService {
         request.password,
         user.password,
       );
-      // console.log(agent);
+      // console.log(isValid);
 
-      if (isValid) {
+      if ( isValid ) {
         const payload = {
           sub: user.id,
           agentName: user.userName,
@@ -37,32 +39,14 @@ export class AuthServiceService {
         const accessToken = await this.jwtService.signAsync(payload, {
           expiresIn: '10h',
         });
+        //console.log('accessToken', accessToken);
 
         const refresh_token = await this.jwtService.signAsync(payload, {
           expiresIn: '30d',
         });
 
-        // Set tokens as cookies
-        // resp.cookie('accessToken', accessToken, {
-        //   httpOnly: true,
-        //   maxAge: 10 * 60 * 60 * 1000, // 10 hour
-        // });
-
-        // resp.cookie('refresh_token', refresh_token, {
-        //   httpOnly: true,
-        //   maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-        // });
-
-        // resp.status(200).send({
-        //   message: 'Login successful.',
-        //   access_token,
-        //   refresh_token,
-        // });
         return {accessToken};
       } else {
-        // resp.status(401).send({
-        //   message: 'Password is not valid',
-        // });
         throw new UnauthorizedException('Password is not valid');
       }
     } catch (error) {

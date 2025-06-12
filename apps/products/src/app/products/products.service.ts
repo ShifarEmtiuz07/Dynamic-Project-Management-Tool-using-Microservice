@@ -7,9 +7,9 @@ import {
   ProductResponse,
 } from 'types/proto/products';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Product } from './entities/product.entity';
+import { Product } from 'libs/shared-entities/src/lib/product.entity';
 import { Repository } from 'typeorm';
-import { Project } from 'apps/projects/src/app/project/entities/project.entity';
+import { Project } from 'libs/shared-entities/src/lib/project.entity';
 
 @Injectable()
 export class ProductsService {

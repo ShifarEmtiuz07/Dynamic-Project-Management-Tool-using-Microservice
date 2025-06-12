@@ -12,6 +12,7 @@ export class AuthController implements AuthServiceController{
 
   @Post()
   login(@Body() request: LoginRequest): Promise<LoginResponse> {
+    //console.log('Login request:', request);
     return this.authServiceService.login(request);
   }
 
