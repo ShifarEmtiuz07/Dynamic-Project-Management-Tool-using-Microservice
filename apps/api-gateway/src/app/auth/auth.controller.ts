@@ -15,7 +15,7 @@ export class AuthController implements OnModuleInit {
 
     @Post('login')
     login(@Body() request: { email: string; password: string }):Observable<LoginResponse> {
-       // console.log('Login request:', request);
+        console.log('Login request:', request);
         return this.authService.login(request);
     }
 

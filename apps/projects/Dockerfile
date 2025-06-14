@@ -16,8 +16,8 @@ RUN npm install
 
 # Build only the tasks app
 RUN npm run build projects
-EXPOSE 5006
+EXPOSE 5001
 
-WORKDIR /usr/src/app/apps/projects
+#WORKDIR /usr/src/app/apps/projects
 
-CMD ["node", "dist/main"]
+CMD ["node", "dist/apps/projects/main"]

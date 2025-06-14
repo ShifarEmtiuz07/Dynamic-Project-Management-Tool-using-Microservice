@@ -1,17 +1,22 @@
-version: '3.8'
+# version: '3.8'
 services:
   postgres:
-    image: postgres:17-alpine
+    image: postgres:14-alpine
     container_name: pg
     restart: always
     ports:
      - "5433:5432"
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: db_password
-      POSTGRES_DB: micro-task
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=db_password
+      - POSTGRES_DB=micro-task
     volumes:
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d micro-task"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   pgadmin:
     image: dpage/pgadmin4
@@ -33,7 +38,7 @@ services:
       - .env
     ports:
       - '5003:5003'
-    command: ["node", "dist/main"]
+    #command: ["node", "dist/main"]
     depends_on:
       - rabbitmq
 
@@ -46,8 +51,8 @@ services:
     env_file:
       - .env
     ports:
-      - '5004:5004'
-    command: ["node", "dist/main"]
+      - '5006:5006'
+    #command: ["node", "dist/main"]
     depends_on:
       - rabbitmq
 
@@ -67,7 +72,7 @@ services:
       - .env
     ports:
       - '5002:5002'
-    command: ["node", "dist/main"]
+    #command: ["node", "dist/main"]
     depends_on:
       - postgres
 
@@ -79,8 +84,8 @@ services:
     env_file:
       - .env
     ports:
-      - '5006:5006'
-    command: ["node", "dist/main"]
+      - '5001:5001'
+    #command: ["node", "dist/main"]
     depends_on:
       - postgres
 
@@ -92,8 +97,8 @@ services:
     env_file:
       - .env
     ports:
-      - '5005:5005'
-    command: ["node", "dist/main"]
+      - '5000:5000'
+    #command: ["node", "dist/main"]
     depends_on:
       - postgres
 
@@ -107,13 +112,14 @@ services:
       - .env
     ports:
       - '3000:3000'
-    command: ["node", "dist/main"]
+    #command: ["node", "dist/main"]
     depends_on:
       - task-service
       - notification-service
       - usermanagement-service
       - projects-service
       - products-service
+      - auth-service
 
   auth-service:
     build:
@@ -121,7 +127,7 @@ services:
       dockerfile: apps/auth/Dockerfile
     container_name: auth-service
     ports:
-       - "5001:5001"
+       - "5004:5004"
     depends_on:
       - postgres
 

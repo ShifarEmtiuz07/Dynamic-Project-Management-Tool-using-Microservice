@@ -18,7 +18,7 @@ async function bootstrap() {
       options: {
         package: TASK_PACKAGE_NAME,
         protoPath: join(__dirname, 'proto/task.proto'),
-         url: 'localhost:5003',
+         url: 'task-service:5003', // 'localhost:5003' for local testing
       //   loader: {
       //   includeDirs: [
       //     path.resolve(__dirname, 'proto'),

@@ -19,6 +19,6 @@ COPY . .
 RUN npm run build userManagement
 EXPOSE 5002
 
-WORKDIR /usr/src/app/apps/userManagement
+#WORKDIR /usr/src/app/apps/userManagement
 
-CMD ["node", "dist/main"]
+CMD ["node", "dist/apps/userManagement/main"]

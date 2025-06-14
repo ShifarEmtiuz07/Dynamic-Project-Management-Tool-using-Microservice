@@ -21,6 +21,6 @@ RUN npm run build api-gateway
 
 EXPOSE 3000
 
-WORKDIR /usr/src/app/apps/api-gateway
+#WORKDIR /usr/src/app/apps/api-gateway
 
-CMD ["node", "dist/main"]
+CMD ["node", "dist/apps/api-gateway/main"]

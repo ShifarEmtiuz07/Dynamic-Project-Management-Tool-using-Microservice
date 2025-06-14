@@ -18,7 +18,7 @@ async function bootstrap() {
       options: {
         package: USER_PACKAGE_NAME,
         protoPath: join(__dirname, 'proto/user.proto'),
-         url: 'localhost:5002',
+         url: 'usermanagement-service:5002', // 'localhost:5002' for local testing
         loader: {
         includeDirs: [
           path.resolve(__dirname, 'proto'),

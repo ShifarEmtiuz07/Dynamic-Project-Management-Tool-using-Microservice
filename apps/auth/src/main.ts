@@ -18,7 +18,7 @@ async function bootstrap() {
       options: {
         package: AUTH_PACKAGE_NAME,
         protoPath: join(__dirname, 'proto/auth.proto'),
-         url: 'localhost:5004',
+         url: 'auth-service:5004', // 'localhost:5004' for local testing
         
       },
     }

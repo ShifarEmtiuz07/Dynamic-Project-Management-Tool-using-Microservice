@@ -16,8 +16,8 @@ RUN npm install
 
 # Build only the notification app
 RUN npm run build notification
-EXPOSE 5004
+EXPOSE 5006
 
-WORKDIR /usr/src/app/apps/notification
+#WORKDIR /usr/src/app/apps/notification
 
-CMD ["node", "dist/main"]
+CMD ["node", "dist/apps/notification/main"]

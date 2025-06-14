@@ -16,7 +16,8 @@ import { NotificationPublisherService } from './notificationPublisher.service';
         name: NOTIFICATION_SERVICE,
         transport: Transport.RMQ,
         options: {
-          urls: ['amqp://localhost:5672'],
+          //urls: ['amqp://localhost:5672'],
+          urls: ['amqp://rabbitmq:5672'],
           queue: 'notification_queue',
           queueOptions: {
             durable: false,

@@ -18,6 +18,6 @@ RUN npm install
 RUN npm run build tasks
 EXPOSE 5003
 
-WORKDIR /usr/src/app/apps/tasks
+#WORKDIR /usr/src/app/apps/tasks
 
-CMD ["node", "dist/main"]
+CMD ["node", "dist/apps/tasks/main"]

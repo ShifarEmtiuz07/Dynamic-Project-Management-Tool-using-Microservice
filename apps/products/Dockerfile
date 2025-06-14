@@ -16,8 +16,8 @@ RUN npm install
 
 # Build only the tasks app
 RUN npm run build products
-EXPOSE 5005
+EXPOSE 5000
 
-WORKDIR /usr/src/app/apps/products
+#WORKDIR /usr/src/app/apps/products
 
-CMD ["node", "dist/main"]
+CMD ["node", "dist/apps/products/main"]

@@ -16,6 +16,7 @@ export class AuthServiceService {
   ) {}
  async login(request: LoginRequest) {
      try {
+      console.log('Login request from service:', request);
       const user = await this.userRepository.findOne({where: { email: request.email } });
 
       //console.log(user)
