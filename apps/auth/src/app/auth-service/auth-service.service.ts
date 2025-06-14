@@ -19,7 +19,7 @@ export class AuthServiceService {
       console.log('Login request from service:', request);
       const user = await this.userRepository.findOne({where: { email: request.email } });
 
-      //console.log(user)
+      console.log(user)
 
       if (!user) {
         throw new UnauthorizedException('User not found');
@@ -40,7 +40,7 @@ export class AuthServiceService {
         const accessToken = await this.jwtService.signAsync(payload, {
           expiresIn: '10h',
         });
-        //console.log('accessToken', accessToken);
+        console.log('accessToken', accessToken);
 
         const refresh_token = await this.jwtService.signAsync(payload, {
           expiresIn: '30d',

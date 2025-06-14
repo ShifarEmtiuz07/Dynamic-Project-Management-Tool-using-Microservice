@@ -20,9 +20,9 @@ export class UserManagementController implements OnModuleInit {
     }
 
     
-@Roles('hr')
-@UseGuards(RolesGuard)
-@UseGuards(AuthGuard)
+// @Roles('hr')
+// @UseGuards(RolesGuard)
+// @UseGuards(AuthGuard)
     @Post()
     createUser(@Body() request: CreateUserRequest ){
      
@@ -40,9 +40,9 @@ export class UserManagementController implements OnModuleInit {
     }
 
 
-  @Roles('TeamMember')
-  @UseGuards(RolesGuard)
-    @UseGuards(AuthGuard)
+//   @Roles('TeamMember')
+//   @UseGuards(RolesGuard)
+//     @UseGuards(AuthGuard)
     @Get()
     listUsers(request: Empty){
          return this.userManagementService.listUsers(request);
