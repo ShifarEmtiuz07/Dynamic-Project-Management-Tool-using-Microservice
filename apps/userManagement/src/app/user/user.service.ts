@@ -1,4 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CreateUserRequest, Empty, UpdateUserRequest, User, UserId } from 'types/proto/user';
@@ -39,7 +41,7 @@ function toProtoTimestamp(date: Date): { seconds: number; nanos: number } {
 export class UserService {
 
 
-  constructor(@InjectRepository(UserEntity) private readonly userRepository:Repository<UserEntity>){}
+  constructor(@InjectRepository(UserEntity) private readonly userRepository:Repository<UserEntity>,@Inject(CACHE_MANAGER) private cacheManager: Cache){}
 
 
   async createUser(createUserDto: CreateUserRequest): Promise<User> {
@@ -116,6 +118,30 @@ export class UserService {
  async findOne(id: UserId) {
 
 
+      const cacheKey = `user:${id.id}`;
+    const cached = await this.cacheManager.get(cacheKey);
+    console.log('Cache Key:', cacheKey);
+    if (cached){
+          const protoUser: User = {
+      id: cached.id,
+      userName: user.userName,
+      //userImage: user.userImage,
+      employeeId: user.employeeId,
+      email: user.email,
+      phone: user.phone,
+      currentTask: user.currentTask,
+      maxTask: user.maxTask,
+      status: user.status,
+      roles: user.roles,
+      skills: user.skills,
+      tasks: user.tasks || [], 
+      createdAt: toProtoTimestamp(user.created_at),
+  updatedAt: toProtoTimestamp(user.updated_at)
+    };
+    return {cached};
+    } 
+
+
     const user = await this.userRepository.findOne({ where:{ id: id.id }});
     if (!user) {
       throw new Error(`User with id ${id.id} not found`);
@@ -137,6 +163,9 @@ export class UserService {
       createdAt: toProtoTimestamp(user.created_at),
   updatedAt: toProtoTimestamp(user.updated_at)
     };
+
+    await this.cacheManager.set(cacheKey, protoUser, 60);
+    console.log('From db:', protoUser);
     return protoUser;
   }
 

@@ -1,3 +1,4 @@
+import { RedisCacheModule } from './../../../../../libs/common/src/redis/redis.module';
 
 import { Module } from '@nestjs/common';
 import { UserService } from './user.service';
@@ -9,7 +10,7 @@ import { TaskEntity } from 'libs/shared-entities/src/lib/task.entity';
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity,TaskEntity])], 
+  imports: [TypeOrmModule.forFeature([UserEntity,TaskEntity]),RedisCacheModule], 
   controllers: [UserController],
 
   providers: [UserService],

@@ -62,6 +62,13 @@ services:
       - "5672:5672"
       - "15672:15672"
 
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - '6379:6379'
+    restart: always
+
   usermanagement-service:
     build:
       context: .
@@ -70,6 +77,9 @@ services:
     container_name: usermanagement-service
     env_file:
       - .env
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
     ports:
       - '5002:5002'
     #command: ["node", "dist/main"]
@@ -110,6 +120,9 @@ services:
     container_name: api-gateway
     env_file:
       - .env
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
     ports:
       - '3000:3000'
     #command: ["node", "dist/main"]
