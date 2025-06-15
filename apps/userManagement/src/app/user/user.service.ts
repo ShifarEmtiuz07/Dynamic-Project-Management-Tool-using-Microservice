@@ -119,7 +119,7 @@ export class UserService {
 
 
       const cacheKey = `user:${id.id}`;
-    const cached = await this.cacheManager.get(cacheKey);
+    const cached:User = await this.cacheManager.get(cacheKey);
     console.log('Cache Key:', cacheKey);
     if (cached){
           const protoUser: User = {
