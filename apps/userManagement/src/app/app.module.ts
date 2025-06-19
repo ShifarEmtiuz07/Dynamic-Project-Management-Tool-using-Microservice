@@ -9,11 +9,12 @@ import { UserModule } from './user/user.module';
 import { UserController } from './user/user.controller';
 import { UserService } from './user/user.service';
 import { TaskEntity } from 'libs/shared-entities/src/lib/task.entity';
+import { RedisCacheModule } from 'libs/common/src/redis/redis.module';
 
  
 
 @Module({
-  imports: [DatabaseModule,UserModule,TypeOrmModule.forFeature([UserEntity,TaskEntity]),
+  imports: [RedisCacheModule,DatabaseModule,UserModule,TypeOrmModule.forFeature([UserEntity,TaskEntity]),
 ],
 
 

@@ -1,3 +1,4 @@
+import { RedisCacheModule } from './../../../../libs/common/src/redis/redis.module';
 import { USER_PACKAGE_NAME } from './../../../../types/proto/user';
 import { PRODUCTS_PACKAGE_NAME } from './../../../../types/proto/products';
 import { Module } from '@nestjs/common';
@@ -24,6 +25,7 @@ import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
+    RedisCacheModule,
         JwtModule.register({
       secret: process.env.JWT_SECRET ,
     }),

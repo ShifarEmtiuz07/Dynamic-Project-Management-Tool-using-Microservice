@@ -61,13 +61,20 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
-
   redis:
     image: redis:7-alpine
     container_name: redis
     ports:
       - '6379:6379'
     restart: always
+    command: redis-server --maxmemory 256mb --maxmemory-policy noeviction --appendonly yes --save 60 1
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - redis_data:/data
 
   usermanagement-service:
     build:
@@ -84,7 +91,10 @@ services:
       - '5002:5002'
     #command: ["node", "dist/main"]
     depends_on:
-      - postgres
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
 
   projects-service:
     build:
@@ -127,12 +137,18 @@ services:
       - '3000:3000'
     #command: ["node", "dist/main"]
     depends_on:
+     
       - task-service
       - notification-service
       - usermanagement-service
       - projects-service
       - products-service
       - auth-service
+      - postgres
+      - redis
+          
+      
+
 
   auth-service:
     build:
@@ -142,8 +158,14 @@ services:
     ports:
        - "5004:5004"
     depends_on:
-      - postgres
+      - postgres 
+
+networks:
+  default:
+    name: microtask-network
+
 
 volumes:
   pgdata:
+  redis_data:
     

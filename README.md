@@ -1,82 +1,160 @@
-# NestjsMicroservice
+# Microservice Architecture with NestJS, gRPC, Redis, PostgreSQL, RabbitMQ, and WebSocket
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+This repository demonstrates a microservice architecture using [NestJS](https://nestjs.com/), [gRPC](https://grpc.io/), [PostgreSQL](https://www.postgresql.org/), [Redis](https://redis.io/), [RabbitMQ](https://www.rabbitmq.com/), [WebSocket](https://docs.nestjs.com/websockets/gateways), and [Docker Compose](https://docs.docker.com/compose/). It includes services for user management, authentication, tasks, products, projects, notifications, and an API gateway.
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is almost ready ✨.
+---
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/nest?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+## Features
 
-## Finish your CI setup
+- **NestJS** for scalable, modular backend services
+- **gRPC** for efficient inter-service communication
+- **RabbitMQ** for message-based microservice communication (e.g., notifications)
+- **WebSocket** for real-time updates (e.g., notifications, live task status)
+- **PostgreSQL** as the main database
+- **Redis** for caching (via `cache-manager-ioredis`)
+- **Docker Compose** for local orchestration
+- **Nx** for monorepo management
+- **Proto files** for contract-first service definitions
 
-[Click here to finish setting up your workspace!](https://cloud.nx.app/connect/aal7T8URPc)
+---
 
+## Project Structure
 
-## Run tasks
-
-To run the dev server for your app, use:
-
-```sh
-npx nx serve api-gateway
+```
+apps/
+  api-gateway/
+  auth/
+  notification/      # Uses RabbitMQ and WebSocket
+  products/
+  projects/
+  tasks/
+  userManagement/
+libs/
+  common/
+  shared-entities/
+  ...
+proto/
+types/
 ```
 
-To create a production bundle:
+---
+
+## Prerequisites
+
+- [Node.js](https://nodejs.org/) (v18+ recommended)
+- [Docker](https://www.docker.com/products/docker-desktop)
+- [Nx CLI](https://nx.dev/) (optional, for local dev)
+
+---
+
+## Getting Started
+
+### 1. Clone the repository
 
 ```sh
-npx nx build api-gateway
+git clone https://github.com/ShifarEmtiuz07/Dynamic-Project-Management-Tool-using-Microservice.git
+cd Dynamic-Project-Management-Tool-using-Microservice
 ```
 
-To see all available targets to run for a project, run:
+### 2. Install dependencies
 
 ```sh
-npx nx show project api-gateway
+npm install
 ```
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+### 3. Set up environment variables
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Add new projects
-
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
-
-Use the plugin's generator to create new projects.
-
-To generate a new application, use:
+Copy `.env.example` to `.env` and adjust as needed:
 
 ```sh
-npx nx g @nx/nest:app demo
+cp .env.example .env
 ```
 
-To generate a new library, use:
+### 4. Start all services with Docker Compose
 
 ```sh
-npx nx g @nx/node:lib mylib
+docker-compose up --build -d
 ```
 
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
+This will start:
+- PostgreSQL (port 5433)
+- Redis (port 6379)
+- RabbitMQ (port 5672, management UI at 15672)
+- pgAdmin (port 5050)
+- All NestJS microservices
+- API Gateway (port 3000)
+- task-service (port 5003)
+- notification-service (port 3000)
+- usermanagement-service (port 5002)
+- projects-service (port 5001)
+- products-service (port 5000)
+- auth-service (port 5004)
 
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+### 5. Accessing Services
 
+- **API Gateway:** http://localhost:3000/api
+- **pgAdmin:** http://localhost:5050 (login with credentials from `.env`)
+- **RabbitMQ Management:** http://localhost:15672 (default user/pass: guest/guest)
+- **WebSocket:** ws://localhost:PORT (see your notification or gateway service for the port)
+- **Other services:** See `docker-compose.yml` for ports
 
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+---
 
-## Install Nx Console
+## Messaging & Real-Time
 
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
+- **RabbitMQ** is used for asynchronous messaging between services (e.g., task events, notifications).
+- **WebSocket** is used for real-time updates to clients (e.g., push notifications, live task status).
+- See the `notification` service for RabbitMQ and WebSocket integration examples.
 
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+---
 
-## Useful links
+## Caching
 
-Learn more:
+- Uses `cache-manager-ioredis` for Redis-backed caching.
+- Configuration is in each service’s module (see `RedisCacheModule`).
 
-- [Learn more about this workspace setup](https://nx.dev/nx-api/nest?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+---
 
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## gRPC
+
+- Proto files are in the `proto/` directory.
+- Types are generated in the `types/` directory.
+
+---
+
+## Auth Service
+
+The **Auth Service** is responsible for:
+
+- **Authentication:**  
+  Handles user login and registration using JWT (JSON Web Tokens). Upon successful login, the service issues access and refresh tokens. Tokens are signed with a secret defined in your `.env` file (`JWT_SECRET`).
+
+- **Authorization:**  
+  Verifies JWT tokens on protected routes. The API Gateway and other services use guards to validate tokens and extract user information from requests.
+
+- **Role-Based Access Control (RBAC):**  
+  Supports role-based permissions using custom decorators and guards. You can annotate controllers or routes with roles (e.g., `@Roles('admin')`) and protect them with the `RolesGuard` and `AuthGuard`. Only users with the required roles can access certain endpoints.
+
+---
+
+## Troubleshooting
+
+- **Docker build errors:** Ensure your Docker build context is set to the monorepo root (`.`) in `docker-compose.yml`.
+- **Redis/DB/RabbitMQ connection issues:** Check your `.env` and Docker Compose service names.
+- **TypeScript errors for cache-manager-ioredis:** Add a `cache-manager-ioredis.d.ts` file with `declare module 'cache-manager-ioredis';`.
+
+---
+
+## License
+
+MIT
+
+---
+
+## Credits
+
+- [NestJS](https://nestjs.com/)
+- [Nx](https://nx.dev/)
+- [cache-manager-ioredis](https://www.npmjs.com/package/cache-manager-ioredis)
+- [RabbitMQ](https://www.rabbitmq.com/)
+- [Docker](https://www.docker.com/)

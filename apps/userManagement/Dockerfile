@@ -3,6 +3,8 @@ FROM node:20-alpine
 WORKDIR /usr/src/app
 
 # Copy root package files and install dependencies for the whole monorepo
+# Install redis-cli
+RUN apk add --no-cache redis
 COPY ../../package*.json ./
 COPY ../../nx.json ./
 COPY ../../tsconfig.base.json ./
